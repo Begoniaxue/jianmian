@@ -84,7 +84,7 @@
       },
       saveImgFn(){
         if (navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) {//安卓手机
-          window.android.saveImg($(obj).attr('data-url'))
+          window.android.saveImg($('.saveImg').attr('data-url'))
         }else{
 
         }
