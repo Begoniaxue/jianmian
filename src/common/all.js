@@ -23,8 +23,11 @@ function getUserInfo() {
   }
 }
 var Request = new getUserInfo();
+let url = 'http://jianmian.myfont.me';
+// let url='http://192.168.248.216:8880';
 export{
-  Request
+  Request,
+  url
 }
 //自适应屏幕
 export function fitScreen(){

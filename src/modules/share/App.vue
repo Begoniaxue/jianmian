@@ -70,7 +70,7 @@
 <script>
   import FontFaceObserver from 'fontfaceobserver'
   import wx from 'weixin-js-sdk'
-  import { Request,fitScreen,wxShare } from "../../common/all.js"
+  import { Request,url,fitScreen,wxShare } from "../../common/all.js"
   import { formatDate,visProp,formatTxt,playHack,resetFontSize } from "../../common/js.js"
   import preview from "../../components/preview"
   import download from '../../components/download'
@@ -103,7 +103,7 @@ export default {
   beforeCreate() {
     let that = this;
     $.ajax({
-      url: 'http://192.168.248.216:8880/api/run/getEssayById',//测试环境
+      url: url+'/api/run/getEssayById',//测试环境
       type: 'post',
       data: {
         'essayType':Request.essayType,

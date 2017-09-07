@@ -5,8 +5,9 @@
       <div class="recMask">
         <h2 class="recommendBt">为您推荐</h2>
         <ul class="list">
-          <li v-for="list in data" @click="toPage(list.essayId)">
-            <img v-lazy="lazyloadUrl(list.essayHomeUrl)" alt="" >
+          <li v-for="list in data" @click="toPage(list.essayId,list.essayType)">
+            <img v-if="list.essayUrl" v-lazy="lazyloadUrl(list.essayUrl)" alt="" >
+            <img v-else v-lazy="lazyloadUrl(list.essayHomeUrl)" alt="">
             <div class="content">
               <h5 class="essayBt">{{list.essayTitle}}</h5>
               <p></p>
@@ -21,7 +22,7 @@
 </template>
 
 <script>
- import { Request} from "../common/all.js"
+ import { Request,url} from "../common/all.js"
 export default{
     name:'recommend',
     data(){
@@ -37,7 +38,7 @@ export default{
     mounted(){
         var _this = this;
         $.ajax({
-          url:'http://192.168.248.216:8880/V1.2/api/er/getEssayRecommend',
+          url:url+'/V1.2/api/er/getEssayRecommend',
           type:'post',
           data:{essayId:Request.essayId},
           dataType: "jsonp",
@@ -49,11 +50,15 @@ export default{
         })
     },
   methods:{
-    toPage(id){
+    toPage(id,type){
         if(Request.share){
           location.href="./share.html?essayType=LE&essayId="+id+"&share=1"
         }else{
-          location.href="./share.html?essayType=LE&essayId="+id
+          if (navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) {//安卓手机
+              window.android.nextArticle(id,'LE')
+          } else {
+            // console.log(share)
+          }
         }
 
     },

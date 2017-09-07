@@ -54,7 +54,7 @@
 
 <script>
   import FontFaceObserver from 'fontfaceobserver'
-  import { Request,fitScreen } from "../../common/all.js"
+  import { Request,url,fitScreen } from "../../common/all.js"
   import { formatDate,visProp,formatTxt } from "../../common/js.js"
   import preview from "../../components/preview"
   import { hybrid } from "../../common/app.js"
@@ -78,7 +78,8 @@ export default {
   beforeCreate() {
     var that = this;
     $.ajax({
-      url: 'http://192.168.248.216:8880/V1.2/api/template/getTemplateById',//测试环境
+      url: url+'/V1.2/api/template/getTemplateById',//测试环境
+//      url:'http://api.jianmian.myfont.me/V1.2/api/template/getTemplateById',//线上
       type: 'post',
       data: {
         'templateId':Request.templateId,

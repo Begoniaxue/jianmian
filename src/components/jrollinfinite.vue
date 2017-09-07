@@ -5,7 +5,7 @@
 <script>
   import 'jroll'
 //  import 'jroll-vue-infinite'
-  import { Request } from "../common/all.js"
+  import { Request,url } from "../common/all.js"
 
   export default {
     // return {
@@ -18,8 +18,7 @@
           bottomed: function () {
             var _this = this
             $.ajax({
-//               url:'http://jianmian.myfont.me/api/run/getMyHomePage',
-              url: 'http://192.168.248.216:8880/api/run/getMyHomePage',
+              url: url+'/api/run/getMyHomePage',
               type: 'post',
               data: {userId: Request.userId, pageNum: 1, pageSize: 6},
               dataType: 'jsonp',

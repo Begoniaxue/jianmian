@@ -44,7 +44,7 @@
   import 'jroll-vue-infinite'
   import 'jroll-pulldown'
   import { animate } from 'animate.css'
-  import { Request,fitScreen,wxShare } from "../../common/all.js"
+  import { Request,url,fitScreen,wxShare } from "../../common/all.js"
 export default{
   name: 'app',
   data(){
@@ -65,7 +65,7 @@ export default{
     let _this = this;
     $.ajax({
 //      url:'http://jianmian.myfont.me/api/run/getUserInfo',
-      url: 'http://192.168.248.216:8880/api/run/getUserInfo',
+      url:url+'/api/run/getUserInfo',
       type: 'post',
       data: {userId: Request.userId},
       dataType: 'jsonp',
@@ -181,7 +181,7 @@ export default{
           var me = this
           $.ajax({
             // url:'http://jianmian.myfont.me/api/run/getMyHomePage',
-            url: 'http://192.168.248.216:8880/api/run/getMyHomePage',
+            url: url+'/api/run/getMyHomePage',
             type: 'post',
             data: {userId: Request.userId, pageNum: me.page+1, pageSize: 6},
             dataType: 'jsonp',
