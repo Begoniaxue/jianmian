@@ -165,7 +165,6 @@ export default {
   },
   created() {
     fitScreen()
-    console.log(this.list)
     if(Request.share){
       wxShare(wx,this.wxTitle,this.wxImgUrl,this.desc)
       playHack()
