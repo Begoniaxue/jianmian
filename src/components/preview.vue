@@ -14,6 +14,7 @@
     name: 'preview',
     data() {
         return{
+          imgUrl:null,
           options: {
             loop: false,
             bgOpacity: 0.9,
@@ -53,6 +54,7 @@
         }
       },
       show(index){
+        this.imgUrl = $('.previewer-demo-img').eq(index).attr('src');
         this.complete(index+1,$('.previewer-demo-img').length)
         this.$refs.previewer.show(index)
         if(!Request.share){
@@ -64,13 +66,13 @@
           $('.saveImg').fadeIn()
         }
       },
-      changeImg(){
+      changeImg(currItem){
+        this.imgUrl = currItem.msrc;
         let curIndex = $('.pswp__counter').html().split('/')[0];
         let allIndex = $('.pswp__counter').html().split('/')[1];
         this.complete(curIndex, allIndex)
       },
-      complete(cur, all){
-        $('.saveImg').attr('data-url', $('.previewer-demo-img').eq(cur - 1).attr('src'))
+      complete(cur, all,item){
         if (Number(cur) != 1) {
           $('.pswp__ui .pswp__button--arrow--left').css('visibility', 'visible');
         } else {
@@ -84,9 +86,9 @@
       },
       saveImgFn(){
         if (navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) {//安卓手机
-          window.android.saveImg($('.saveImg').attr('data-url'))
+          window.android.saveImg(this.imgUrl)
         }else{
-
+          console.log(this.imgUrl)
         }
       }
     }

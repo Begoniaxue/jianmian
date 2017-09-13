@@ -8,7 +8,6 @@
       <div class="userMes absolute" v-if="styleObject.left" :style="{ left:styleObject.left+'px',top:styleObject.top+'px' }">
         <div class="fl userImg">
          <img :src="data.picture" :onerror="logo" @click="toUserPage(data.userId)" alt="">
-          <!--<img :src="data.picture" onerror="this.src='../../assets/userImg.png'" @click="resetTextSize(-2)" alt="">-->
         </div>
         <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==2" class="fl text_center textFont2" :style="{ fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize]}">{{data.nick}}·著</div>
         <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==1" class="fl text_center textFont1" :style="{fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize]}">{{data.updateDate | formatDate}}</div>
