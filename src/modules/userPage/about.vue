@@ -212,7 +212,7 @@ export default{
 
         },
       }, {
-        scrollBarY: true
+        scrollBarY: false
       })
   }
 }

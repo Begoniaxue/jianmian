@@ -6,10 +6,12 @@
       <div class="absolute bgTop"><img :src="data.longTemplate.templateBaseInfo.backTopUrl" alt=""></div>
       <header class="absolute"><img :src="data.essayUrl" alt="" class="banner"></header>
       <div class="userMes absolute" v-if="styleObject.left" :style="{ left:styleObject.left+'px',top:styleObject.top+'px' }">
-        <div class="fl userImg">
-         <img :src="data.picture" :onerror="logo" @click="toUserPage(data.userId)" alt="">
-        </div>
-        <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==2" class="fl text_center textFont2" :style="{ fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize]}">{{data.nick}}·著</div>
+        <span v-if="!share || (share && data.isSm==1)">
+          <div class="fl userImg">
+            <img :src="data.picture" :onerror="logo" @click="toUserPage(data.userId)" alt="">
+          </div>
+          <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==2" class="fl text_center textFont2" :style="{ fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize]}">{{data.nick}}·著</div>
+        </span>
         <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==1" class="fl text_center textFont1" :style="{fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize]}">{{data.updateDate | formatDate}}</div>
       </div>
       <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==6"  class="context textFont6" :style="{fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize],paddingTop:property.propertyTop/2+'px'}">
@@ -54,7 +56,7 @@
       </div>
     </div>
     <preview v-if="!isBlank" :imgs="list" ref="preview"></preview>
-    <div v-if="!isBlank" id="music" v-on:click="musicFn" :style="{right:musicWidth/2-0+5+'px'}">
+    <div v-if="!isBlank && data.musicLink" id="music" v-on:click="musicFn" :style="{right:musicWidth/2-0+5+'px'}">
       <div class="music"  :class="isPlay"><audio id="audio" :src="data.musicLink" style="display: none" preload autoplay loop></audio></div>
     </div>
     <recommend v-if="!isBlank &&　data.longTemplate" :bgImg="data.longTemplate.templateBaseInfo.backBottomUrl"></recommend>
@@ -86,6 +88,7 @@ export default {
       styleObject:{},
       myfont:'',
       list:[],
+      isHasTxt:false,
       musicWidth:$(window).width()-375,
       isBlank:false,
       fontSize:['19px','19px','19px'],
@@ -136,6 +139,7 @@ export default {
                 item.fontSize = 54
               }
               if(item.copyInfo){
+                that.isHasTxt = true;
                 essayArray.push(item.copyInfo)
               }
             })
@@ -153,8 +157,11 @@ export default {
       complete:function(){
           if(!Request.share){
             if (navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) {//安卓手机
-//              window.android.getData(that.data)
               window.android.showWebView()
+              if(!that.isHasTxt){
+                window.android.hideButton()
+              }
+
             } else {
               // console.log(share)
             }
