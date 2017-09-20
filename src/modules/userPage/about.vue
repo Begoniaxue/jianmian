@@ -131,6 +131,7 @@ export default{
     this.$refs.myjroll.jroll.on("scroll", function() {
         _this.scrolling = true;
       _this.showText2($('.contLi'))
+      console.log(this.y)
       if(this.y<-190*7){
         _this.topShow = true
         _this.move = true

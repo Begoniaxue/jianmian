@@ -88,10 +88,10 @@ export function resetFontSize(num,obj){
   for(var i=0;i<obj.length;i++) {
     console.log(parseInt(num))
     var fontSize = obj.eq(i).css('fontSize').substring(0,2);
-    if(parseInt(num)>0 && fontSize>=25){
-      obj.eq(i).css('fontSize','27px')
+    if(parseInt(num)>0 && fontSize>=33){
+      obj.eq(i).css('fontSize','35px')
     }else if(parseInt(num)<0 && fontSize<=21){
-      obj.eq(i).css('fontSize','19px')
+      obj.eq(i).css('fontSize','17px')
     }else{
       obj.eq(i).css('fontSize',fontSize-0+num+'px')
     }

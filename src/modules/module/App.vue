@@ -68,7 +68,7 @@ export default {
       myfonts:[],
       myfont:'',
       list:[],
-      fontSize:['19px','19px','19px'],
+      fontSize:['23px','23px','23px'],
       align:['justify','right','center'],
       fontWeight:['normal','blod'],
       fontStyle:['normal','italic'],

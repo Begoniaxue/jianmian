@@ -18,11 +18,11 @@
         <div class="part" :style="{minHeight:winHeight-property.propertyTop/2-108+'px',backgroundImage:'url('+data.longTemplate.templateBaseInfo.moduleBackUrl+')',margin:'0 '+property.propertyLeft/2+'px'}">
             <div v-for="list in data.essayCopyList" v-if="list.copyPosition==0">
               <img v-if="list.copyUrl" class="previewer-demo-img" v-lazy="list.copyUrl" alt="" @click="show(list.flag)" :style="{width:list.width+'px'}">
-              <p v-if="list.copyInfo" class="text_part text"  v-html="formatTxt(list.copyInfo)" :style="{textAlign:align[list.alignType],fontSize:list.fontSize>2?list.fontSize/2+'px':fontSize[list.fontSize],fontWeight:fontWeight[list.isBold],fontStyle:fontStyle[list.isItalic],textDecoration:textDecoration[list.isUnderline]}"></p>
+              <p v-if="list.copyInfo" class="text_part text"  v-html="formatTxt(list.copyInfo)" :style="{textAlign:align[list.alignType],fontSize:list.fontSize>2?list.fontSize/2+'px':fontSize[list.fontSize],color:list.fontColor,fontWeight:fontWeight[list.isBold],fontStyle:fontStyle[list.isItalic],textDecoration:textDecoration[list.isUnderline]}"></p>
             </div>
             <div v-for="list in data.essayCopyList" v-if="list.copyPosition==1">
               <img v-if="list.copyUrl" class="previewer-demo-img" v-lazy="list.copyUrl" alt="" @click="show(list.flag)" :style="{width:list.width+'px'}">
-              <p v-if="list.copyInfo" class="text_part text" v-html="formatTxt(list.copyInfo)" :style="{textAlign:align[list.alignType],fontSize:list.fontSize>2?list.fontSize/2+'px':fontSize[list.fontSize],fontWeight:fontWeight[list.isBold],fontStyle:fontStyle[list.isItalic],textDecoration:textDecoration[list.isUnderline]}"></p>
+              <p v-if="list.copyInfo" class="text_part text" v-html="formatTxt(list.copyInfo)" :style="{textAlign:align[list.alignType],fontSize:list.fontSize>2?list.fontSize/2+'px':fontSize[list.fontSize],color:list.fontColor,fontWeight:fontWeight[list.isBold],fontStyle:fontStyle[list.isItalic],textDecoration:textDecoration[list.isUnderline]}"></p>
             </div>
         </div>
         <div class="bgDown"><img :src="data.longTemplate.templateBaseInfo.backDownUrl" alt=""></div>
@@ -91,9 +91,9 @@ export default {
       isHasTxt:false,
       musicWidth:$(window).width()-375,
       isBlank:false,
-      fontSize:['19px','19px','19px'],
+      fontSize:['23px','23px','23px'],
       align:['justify','right','center'],
-      fontWeight:['normal','blod'],
+      fontWeight:['normal','bold'],
       fontStyle:['normal','italic'],
       textDecoration:['none','underline'],
       share:Request.share,
@@ -124,8 +124,8 @@ export default {
             if( result.labelGroupList){
              label= result.labelGroupList[0].labelGroupName?'—'+result.labelGroupList[0].labelGroupName+'—':''
             }
-
-          document.title = that.wxTitle = result.essayTitle + label + result.nick +'—精选文章推荐—见字如面，随时随地分享精美文章';
+            var nick =  (result.isSm == 1) ? result.nick : '';
+          document.title = that.wxTitle =result.essayTitle + label + nick +'—精选文章推荐—见字如面，随时随地分享精美文章' ;
           var essayArray = [];
           if(result.essayCopyList){
             result.essayCopyList.forEach((item,index)=>{
