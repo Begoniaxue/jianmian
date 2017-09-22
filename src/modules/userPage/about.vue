@@ -25,9 +25,12 @@
             <img src="../../assets/icon_r.svg" alt="">
           </div>
         </div>
-
+        <div v-if="data.total==0" class="blankImg" :style="{height:cont_h+'px'}">
+          <img  src="../../assets/pic_blank.png" alt="">
+        </div>
       </div>
     </jroll-infinite>
+
     <div class="floatImg" :class="direction" v-show="move">
       <div class="img" :style="{ backgroundImage:'url(' + userData.picture +')'}"></div>
     </div>
@@ -52,6 +55,7 @@ export default{
         userData:{},
         data:{},
         list:[],
+        cont_h:$(window).height()-270,
         n:Math.floor($(window).height()/190-1),
         direction:'',
         move:false,
@@ -71,7 +75,11 @@ export default{
       dataType: 'jsonp',
       jsonpCallBack: 'successCallBack1',
       success: function (data) {
-        _this.userData = data.resultData
+        console.log(data)
+        _this.userData =data.resultData
+        if(data.resultData.essayCount==0){
+          $('.jroll-infinite-tip').hide()
+        }
       }
     })
 
@@ -124,39 +132,40 @@ export default{
   mounted(){
     let _this =this;
     let startY = '';
-
     this.$refs.myjroll.jroll.on("scrollStart", function() {
       startY = this.y
     })
     this.$refs.myjroll.jroll.on("scroll", function() {
         _this.scrolling = true;
       _this.showText2($('.contLi'))
-      console.log(this.y)
-      if(this.y<-190*7){
-        _this.topShow = true
-        _this.move = true
-        $('.floatMask').fadeIn()
-        _this.src_top =  require('../../assets/btn-toTop-m.png')
-      }else{
-        _this.topShow = false
-        if(this.y<-30){
+      if($('#wrapper div').height() > $(window).height()){
+        if(this.y<-190*7){
+          _this.topShow = true
           _this.move = true
           $('.floatMask').fadeIn()
-          if(this.y<startY){
-            _this.direction = 'down'
-          }
+          _this.src_top =  require('../../assets/btn-toTop-m.png')
         }else{
+          _this.topShow = false
+          if(this.y<-20){
+            _this.move = true
+            $('.floatMask').fadeIn()
+            if(this.y<startY){
+              _this.direction = 'down'
+            }
+          }else{
             if(this.y>=0){
               setTimeout(()=>{
                 _this.move = false
               },600)
               $('.floatMask').fadeOut()
             }
-        }
-        if(this.y >= -58 && this.y>startY){
-          _this.direction = 'up'
+          }
+          if(this.y >= -60 && this.y>startY){
+            _this.direction = 'up'
+          }
         }
       }
+
     });
     this.$refs.myjroll.jroll.on("scrollEnd", function() {
       _this.scrolling = false;
@@ -167,8 +176,8 @@ export default{
       download,
       'jroll-infinite':
       JRoll.VueInfinite({
-        tip:'加载中…',
-        completeTip: '<span class="no-more"></span>',
+        tip:'<span>加载中…</span><div style="height:57px"></div>',
+        completeTip: '<span class="no-more"></span><div style="height:57px"></div>',
         pulldown: {
           iconArrow:'',
           iconLoading:'',
@@ -180,6 +189,19 @@ export default{
         },
         bottomed: function (complete) {
           var me = this
+          if (typeof complete === 'function') {
+            $.ajax({
+              url: url + '/api/run/getUserInfo',
+              type: 'post',
+              data: {userId: Request.userId},
+              dataType: 'jsonp',
+              jsonpCallBack: 'successCallBack1',
+              success: function (data) {
+                console.log(data)
+                me.$parent.userData = data.resultData
+              }
+            })
+          }
           $.ajax({
             // url:'http://jianmian.myfont.me/api/run/getMyHomePage',
             url: url+'/api/run/getMyHomePage',
@@ -192,6 +214,9 @@ export default{
               // 加入下拉刷新功能后需要判断complete是否为function类型，是，表示刷新，复位第1页；否，表示上拉加载下一页，拼接下一页数据
               if (typeof complete === 'function') {
                 me.$parent.list = data.resultData.list
+                if(data.resultData.total==0){
+                  $('.jroll-infinite-tip').hide()
+                }
                 complete()
               } else {
                 me.$parent.data = data.resultData
@@ -224,7 +249,7 @@ export default{
 #app
   position: absolute;
   top:0;
-  bottom: 0;
+  bottom:0;
   left:50%
   margin-left:-187.5px
   width: 375px
@@ -233,7 +258,6 @@ export default{
     top: 0;
     bottom: 0;
     width: 100%;
-    padding-bottom:60px;
     height:100%;
     box-sizing: border-box;
   .bgImg
@@ -366,6 +390,13 @@ export default{
           font-size:15px;
           span
             display:none
+
+  .blankImg
+    padding-top: 80px
+    background:#2c2c2c
+    img
+      width:250px
+      margin:0 auto
   .xs-plugin-pullup-up
     .no-more
       img
@@ -443,12 +474,12 @@ export default{
     z-index:999
     transform:translateX(-50%)
     top:108px;
-    width:90%
+    max-width:90%
+    text-align: left
     font-size 20px
     color #F6D11B
     line-height 34px
     letter-spacing  1.11px
-    text-align  center
     text-overflow  ellipsis
     white-space nowrap
     overflow hidden
@@ -459,14 +490,18 @@ export default{
         from{
           top:108px
           left:50%
+          max-width:90%
           color:#F6D11B
           font-size:20px
+          transform:translateX(-50%)
         }
         to{
           color:#fff;
           top:13px;
-          left:56%
+          left:48%
+          max-width:35%
           font-size:16px
+          transform:translateX(0)
         }
     &.up
       animation:moveNameup 600ms;
@@ -475,14 +510,18 @@ export default{
         from{
           color:#fff;
           top:13px;
-          left:56%
+          left:48%
+          max-width:35%
           font-size:16px
+          transform:translateX(0)
         }
         to{
           top:108px
           left:50%
+          max-width:90%
           color:#F6D11B
           font-size:20px
+          transform:translateX(-50%)
         }
   .pullIcon1
       display:block;
