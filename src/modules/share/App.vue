@@ -15,7 +15,7 @@
         <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==1" class="fl text_center textFont1" :style="{fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize]}">{{data.updateDate | formatDate}}</div>
       </div>
       <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==6"  class="context textFont6" :style="{fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize],paddingTop:property.propertyTop/2+'px'}">
-        <div class="part" :style="{minHeight:winHeight-property.propertyTop/2-108+'px',backgroundImage:'url('+data.longTemplate.templateBaseInfo.moduleBackUrl+')',margin:'0 '+property.propertyLeft/2+'px'}">
+        <div class="part" :style="{minHeight:winHeight-property.propertyTop/2-86+'px',backgroundImage:'url('+data.longTemplate.templateBaseInfo.moduleBackUrl+')',margin:'0 '+property.propertyLeft/2+'px'}">
             <div v-for="list in data.essayCopyList" v-if="list.copyPosition==0">
               <img v-if="list.copyUrl" class="previewer-demo-img" v-lazy="list.copyUrl" alt="" @click="show(list.flag)" :style="{width:list.width+'px'}">
               <p v-if="list.copyInfo" class="text_part text"  v-html="formatTxt(list.copyInfo)" :style="{textAlign:align[list.alignType],fontSize:list.fontSize>2?list.fontSize/2+'px':fontSize[list.fontSize],color:list.fontColor,fontWeight:fontWeight[list.isBold],fontStyle:fontStyle[list.isItalic],textDecoration:textDecoration[list.isUnderline]}"></p>
@@ -105,7 +105,7 @@ export default {
   beforeCreate() {
     let that = this;
     $.ajax({
-      url: url+'/api/run/getEssayById',//测试环境
+      url: url+'/api/run/getEssayById',
       type: 'post',
       data: {
         'essayType':Request.essayType,
@@ -126,6 +126,7 @@ export default {
             }
             var nick =  (result.isSm == 1) ? result.nick : '';
           document.title = that.wxTitle =result.essayTitle + label + nick +'—精选文章推荐—见字如面，随时随地分享精美文章' ;
+
           var essayArray = [];
           if(result.essayCopyList){
             result.essayCopyList.forEach((item,index)=>{
@@ -150,6 +151,15 @@ export default {
           that.data =result;
           that.userMesPos(result.longTemplate.propertiesList,that)
           that.getFont(result.fontLink,result.fontName,that)
+          if(result.longTemplate.templateBaseInfo){
+              var img = new Image();
+                  img.src = result.longTemplate.templateBaseInfo.backDownUrl;
+                  img.onload=function(){
+                      var _h = $('.bgDown').height();
+                      $('.part').css('min-height',that.winHeight-$('.part').offset().top-_h)
+                    console.log(that.winHeight,$('.part').offset().top,_h)
+                  }
+          }
         }else if(!result){
           that.isBlank = true
         }
