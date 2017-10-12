@@ -4,7 +4,7 @@
     <!--普通模板-->
     <div v-if="data.longTemplate && data.longTemplate.templateClass=='pt'" class="longModule" :style="{ backgroundImage:'url('+data.longTemplate.templateBaseInfo.backBottomUrl+')'}">
       <div class="absolute bgTop"><img :src="data.longTemplate.templateBaseInfo.backTopUrl" alt=""></div>
-      <header class="absolute"><img :src="data.essayUrl" alt="" class="banner"></header>
+      <header class="absolute"><img :src="data.essayThum" alt="" class="banner"></header>
       <div class="userMes absolute" v-if="styleObject.left" :style="{ left:styleObject.left+'px',top:styleObject.top+'px' }">
         <span v-if="!share || (share && data.isSm==1)">
           <div class="fl userImg">
@@ -14,8 +14,8 @@
         </span>
         <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==1" class="fl text_center textFont1" :style="{fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize]}">{{data.updateDate | formatDate}}</div>
       </div>
-      <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==6"  class="context textFont6" :style="{fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize],paddingTop:property.propertyTop/2+'px'}">
-        <div class="part" :style="{minHeight:winHeight-property.propertyTop/2-86+'px',backgroundImage:'url('+data.longTemplate.templateBaseInfo.moduleBackUrl+')',margin:'0 '+property.propertyLeft/2+'px'}">
+      <div v-for="property in data.longTemplate.propertiesList" v-if="property.propertyType==6"  class="context textFont6" :style="{minHeight:winHeight-property.propertyTop/2-86+'px',fontFamily:myfont,color:property.propertyColor,fontSize:property.fontSize>2?property.fontSize/2+'px':fontSize[property.fontSize],paddingTop:property.propertyTop/2+'px'}">
+        <div class="part" :style="{backgroundImage:'url('+data.longTemplate.templateBaseInfo.moduleBackUrl+')',margin:'0 '+property.propertyLeft/2+'px'}">
             <div v-for="list in data.essayCopyList" v-if="list.copyPosition==0">
               <img v-if="list.copyUrl" class="previewer-demo-img" v-lazy="list.copyUrl" alt="" @click="show(list.flag)" :style="{width:list.width+'px'}">
               <p v-if="list.copyInfo" class="text_part text"  v-html="formatTxt(list.copyInfo)" :style="{textAlign:align[list.alignType],fontSize:list.fontSize>2?list.fontSize/2+'px':fontSize[list.fontSize],color:list.fontColor,fontWeight:fontWeight[list.isBold],fontStyle:fontStyle[list.isItalic],textDecoration:textDecoration[list.isUnderline]}"></p>
@@ -25,8 +25,8 @@
               <p v-if="list.copyInfo" class="text_part text" v-html="formatTxt(list.copyInfo)" :style="{textAlign:align[list.alignType],fontSize:list.fontSize>2?list.fontSize/2+'px':fontSize[list.fontSize],color:list.fontColor,fontWeight:fontWeight[list.isBold],fontStyle:fontStyle[list.isItalic],textDecoration:textDecoration[list.isUnderline]}"></p>
             </div>
         </div>
-        <div class="bgDown"><img :src="data.longTemplate.templateBaseInfo.backDownUrl" alt=""></div>
       </div>
+      <div class="bgDown"><img :src="data.longTemplate.templateBaseInfo.backDownUrl" alt=""></div>
     </div>
     <!--书信模板-->
     <div v-if="data.longTemplate && data.longTemplate.templateClass=='sx'" class="longModule letterModule" :style="{ background:'url('+data.longTemplate.templateBaseInfo.backBottomUrl+') repeat-y center top',backgroundSize:'100% auto'}">
@@ -155,9 +155,12 @@ export default {
               var img = new Image();
                   img.src = result.longTemplate.templateBaseInfo.backDownUrl;
                   img.onload=function(){
-                      var _h = $('.bgDown').height();
-                      $('.part').css('min-height',that.winHeight-$('.part').offset().top-_h)
-                    console.log(that.winHeight,$('.part').offset().top,_h)
+                      var _h = $('.bgDown').height()-2;
+                      $('.context').css('min-height',$(window).height()-$('.part').offset().top-_h)
+                    console.log($(window).height(),$('.part').offset().top,_h)
+                      $(window).resize(function(){
+                        $('.context').css('min-height',$(window).height()-$('.part').offset().top-$('.bgDown').height()+2)
+                      })
                   }
           }
         }else if(!result){
