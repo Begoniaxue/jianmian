@@ -103,16 +103,29 @@ export default {
     }
   },
   beforeCreate() {
-    let that = this;
+    let that = this,
+     _data = null,
+      myUrl = '';
+    if(Request.essayId){
+        console.log('文章'+Request.essayId)
+      _data = {
+            'essayType':Request.essayType,
+            'essayId': Request.essayId,
+            "clientType":'h5',
+           "userId":Request.userId
+        }
+      myUrl = url+'/api/run/getEssayById';
+    }else if(Request.draftId){
+        console.log('草稿'+Request.draftId)
+        _data = {
+          "draftId":Request.draftId
+        }
+      myUrl = url+'/V1.2/api/draft/getDraftJson';
+    }
     $.ajax({
-      url: url+'/api/run/getEssayById',
+      url:myUrl,
       type: 'post',
-      data: {
-        'essayType':Request.essayType,
-        'essayId': Request.essayId,
-        "clientType":'h5',
-        "userId":Request.userId
-      },
+      data: _data,
       dataType: "jsonp",
       jsonpCallback: "successCallback",
       success: function (data) {
